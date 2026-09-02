@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Energy Efficiency Checker</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- HEADER -->
+    <header>
+      <div class="header-top">
+        <div class="trane-badge">
+          Powered by <span class="trane-logo">TRANE TECHNOLOGIES</span>
+        </div>
+        <button
+          class="theme-toggle"
+          id="themeToggle"
+          aria-label="Toggle dark mode"
+        >
+          <span class="theme-icon">🌙</span>
+        </button>
+      </div>
+      <div class="header-content">
+        <h1>⚡ Energy Efficiency Checker</h1>
+        <p class="header-subtitle">
+          Discover your building efficiency potential and unlock cost savings
+        </p>
+      </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero-section">
+      <div class="hero-content">
+        <div class="hero-text">
+          <h2>Smart Energy Analysis for Modern Buildings</h2>
+          <p>
+            Get instant insights into your building's energy performance,
+            identify inefficiencies, and receive AI-powered recommendations to
+            reduce costs by up to 30%.
+          </p>
+          <div class="hero-features">
+            <button class="feature-item" data-feature="analysis">
+              <span class="feature-icon">📊</span>
+              <span>Detailed Analysis</span>
+            </button>
+            <button class="feature-item" data-feature="ai">
+              <span class="feature-icon">🤖</span>
+              <span>AI Recommendations</span>
+            </button>
+            <button class="feature-item" data-feature="savings">
+              <span class="feature-icon">💰</span>
+              <span>Savings Estimate</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feature Modal -->
+      <div class="feature-modal" id="featureModal">
+        <div class="feature-modal-content">
+          <button class="modal-close" id="modalClose">✕</button>
+          <div class="feature-modal-header">
+            <span class="feature-modal-icon" id="modalIcon"></span>
+            <h3 id="modalTitle"></h3>
+          </div>
+          <p id="modalDescription"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ANALYZING OVERLAY -->
+    <div class="analyzing-overlay" id="analyzingOverlay">
+      <div class="analyzing-content">
+        <div class="spinner"></div>
+        <h2>Analyzing Your Building</h2>
+        <p>Calculating energy efficiency score...</p>
+      </div>
+    </div>
+
+    <!-- MAIN FORM SECTION -->
+    <main>
+      <div class="form-container">
+        <h2>Enter Your Building Details</h2>
+        <p class="form-subtitle">
+          Fill in the fields below and click Analyze to get your results
+        </p>
+
+        <form id="energyForm">
+          <!-- Building Size -->
+          <div class="form-group">
+            <label for="buildingSize">Building Size (Square Footage)</label>
+            <input
+              type="number"
+              id="buildingSize"
+              placeholder="e.g. 5000"
+              min="1"
+              required
+            />
+          </div>
+
+          <!-- Number of Floors -->
+          <div class="form-group">
+            <label for="floors">Number of Floors</label>
+            <input
+              type="number"
+              id="floors"
+              placeholder="e.g. 3"
+              min="1"
+              required
+            />
+          </div>
+
+          <!-- HVAC System Type -->
+          <div class="form-group">
+            <label for="hvacType">Type of HVAC System</label>
+            <select id="hvacType" required>
+              <option value="">-- Select HVAC Type --</option>
+              <option value="modern">Modern (Less than 5 years old)</option>
+              <option value="mid">Mid-Age (5 to 15 years old)</option>
+              <option value="old">Old (More than 15 years old)</option>
+            </select>
+          </div>
+
+          <!-- Building Age -->
+          <div class="form-group">
+            <label for="buildingAge">Building Age (Years)</label>
+            <input
+              type="number"
+              id="buildingAge"
+              placeholder="e.g. 20"
+              min="1"
+              required
+            />
+          </div>
+
+          <!-- Monthly Energy Bill -->
+          <div class="form-group">
+            <label for="energyBill">Average Monthly Energy Bill ($)</label>
+            <input
+              type="number"
+              id="energyBill"
+              placeholder="e.g. 1500"
+              min="1"
+              required
+            />
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" class="analyze-btn">
+            Analyze My Building ⚡
+          </button>
+        </form>
+      </div>
+
+      <!-- RESULTS SECTION (Hidden until form is submitted) -->
+      <div class="results-container" id="resultsContainer">
+        <h2>Your Results</h2>
+
+        <!-- Score -->
+        <div class="score-section">
+          <p class="score-label">Energy Efficiency Score</p>
+          <div class="score-circle" id="scoreCircle">
+            <span id="scoreValue">0</span>
+            <small>/100</small>
+          </div>
+          <p class="score-description" id="scoreDescription"></p>
+        </div>
+
+        <!-- Score Breakdown -->
+        <div class="score-breakdown-section">
+          <h3>📊 Score Breakdown</h3>
+          <div class="breakdown-list" id="breakdownList"></div>
+        </div>
+
+        <!-- Recommendations -->
+        <div class="recommendations-section">
+          <h3>🔧 Recommendations for Improvement</h3>
+          <ul id="recommendationsList"></ul>
+        </div>
+
+        <!-- Estimated Savings -->
+        <div class="savings-section">
+          <h3>💰 Estimated Monthly Savings</h3>
+          <p id="savingsAmount"></p>
+        </div>
+
+        <!-- Analyze Again Button -->
+        <button class="analyze-again-btn" id="analyzeAgain">
+          Analyze Another Building
+        </button>
+      </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+      <p>
+        Energy Efficiency Checker — Built for Trane Technologies | Powered by
+        AI-Assisted Development
+      </p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

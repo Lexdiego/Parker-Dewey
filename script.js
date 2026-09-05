@@ -450,59 +450,28 @@ async function getAIRecommendations(
   score,
 ) {
   try {
-    const buildingProfile = `
-      Building Profile:
-      - Age: ${buildingAge} years
-      - Size: ${buildingSize} square feet
-      - Number of Floors: ${Math.ceil(buildingSize / 5000)}
-      - HVAC System: ${hvacType}
-      - Monthly Energy Bill: $${energyBill}
-      - Energy Efficiency Score: ${score}/100
-    `;
-
-    const prompt = `You are an energy efficiency consultant. Based on the following building profile, provide 6-8 specific, actionable recommendations for improving energy efficiency. Format each recommendation as a single line starting with an emoji relevant to the recommendation (e.g., 💡, 🔧, 🌱, etc.).
-
-${buildingProfile}
-
-Provide practical, measurable recommendations that would help improve this building's energy efficiency. Each recommendation should be specific and could potentially reduce energy costs or improve sustainability.`;
-
-    const response = await fetch(
-      "https://openrouter.ai/api/v1/chat/completions",
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${OPENROUTER_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          model: "openrouter/auto",
-          messages: [
-            {
-              role: "user",
-              content: prompt,
-            },
-          ],
-          temperature: 0.7,
-          max_tokens: 1000,
-        }),
+    const response = await fetch("/api/recommend", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
       },
-    );
+      body: JSON.stringify({
+        hvacType,
+        buildingAge,
+        buildingSize,
+        energyBill,
+        score,
+      }),
+    });
 
     if (!response.ok) {
-      throw new Error(`API Error: ${response.status} ${response.statusText}`);
+      throw new Error(`API Error: ${response.status}`);
     }
 
     const data = await response.json();
-    const aiRecommendations = data.choices[0].message.content
-      .split("\n")
-      .filter((line) => line.trim().length > 0)
-      .map((line) => line.trim());
-
-    // Return only AI recommendations
-    return aiRecommendations;
+    return data.recommendations;
   } catch (error) {
     console.error("Error fetching AI recommendations:", error);
-    // Fallback recommendations if API fails
     return [
       "💡 Upgrade your HVAC system to a modern energy-efficient model to reduce consumption by up to 30%.",
       "🔧 Install smart thermostats and building automation systems to optimize energy usage automatically.",

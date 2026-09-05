@@ -111,8 +111,6 @@ const scoreCircle = document.getElementById("scoreCircle");
 // ===== OPENROUTER API CONFIGURATION =====
 // IMPORTANT: Replace the API key below with your actual OpenRouter API key
 // Get your free API key at: https://openrouter.ai
-const OPENROUTER_API_KEY = CONFIG.OPENROUTER_API_KEY;
-
 // ===== FORM SUBMIT EVENT =====
 energyForm.addEventListener("submit", async function (e) {
   e.preventDefault();

@@ -1,4 +1,4 @@
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
     // Allow requests from any origin
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -41,6 +41,12 @@ Provide practical, measurable recommendations specific to this building profile.
             })
         });
 
+        if (!response.ok) {
+            const errorData = await response.text();
+            console.error('OpenRouter error:', errorData);
+            return res.status(500).json({ error: 'OpenRouter API failed', details: errorData });
+        }
+
         const data = await response.json();
         const recommendations = data.choices[0].message.content
             .split('\n')
@@ -50,7 +56,7 @@ Provide practical, measurable recommendations specific to this building profile.
         return res.status(200).json({ recommendations });
 
     } catch (error) {
-        console.error('Error:', error);
-        return res.status(500).json({ error: 'Failed to get recommendations' });
+        console.error('Handler error:', error);
+        return res.status(500).json({ error: error.message });
     }
 }

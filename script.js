@@ -439,6 +439,75 @@ function getRecommendations(hvacType, buildingAge, buildingSize, energyBill) {
   return recommendations;
 }
 
+function buildContextualFallbackRecommendations(
+  hvacType,
+  buildingAge,
+  buildingSize,
+  energyBill,
+  score,
+) {
+  const recommendations = [];
+
+  if (hvacType === "old") {
+    recommendations.push(
+      "💡 Replace or significantly retrofit the aging HVAC system with a high-efficiency unit sized for this building to improve seasonal performance and reduce cooling and heating waste.",
+    );
+  } else if (hvacType === "mid") {
+    recommendations.push(
+      "🔧 Tune up and optimize the current HVAC system with variable-speed controls, coil cleaning, and recalibrated controls to improve efficiency without a full replacement.",
+    );
+  } else {
+    recommendations.push(
+      "🔧 Keep the modern HVAC system performing at peak efficiency by using smart scheduling, filter replacement, and commissioning checks to avoid unnecessary load cycles.",
+    );
+  }
+
+  if (buildingAge > 30) {
+    recommendations.push(
+      "🏗️ Prioritize envelope upgrades such as insulation, air sealing, and window retrofits because an older structure is likely losing significant conditioned air through leaks and weak barriers.",
+    );
+  } else if (buildingAge > 15) {
+    recommendations.push(
+      "🏠 Conduct a targeted building envelope audit to identify insulation gaps and air leaks that are driving unnecessary heating and cooling losses in this mid-age structure.",
+    );
+  } else {
+    recommendations.push(
+      "🏠 Review recent envelope performance and seal any penetrations, duct joints, and small leaks to prevent avoidable air loss and improve system efficiency.",
+    );
+  }
+
+  const billPerSqft = energyBill / Math.max(buildingSize, 1);
+  if (billPerSqft > 0.35) {
+    recommendations.push(
+      "📉 Install a building energy management system with submetering and automated setpoints to reduce costly peak demand and optimize usage across this larger utility load.",
+    );
+  } else if (billPerSqft > 0.2) {
+    recommendations.push(
+      "📊 Add programmable thermostats and occupancy sensors to reduce unnecessary conditioning in lower-use periods and areas across the building.",
+    );
+  } else {
+    recommendations.push(
+      "📊 Use interval energy monitoring and monthly trend reviews to catch small inefficiencies early before they become significant cost drains.",
+    );
+  }
+
+  if (score < 50) {
+    recommendations.push(
+      "⚡ Replace outdated lighting with LED fixtures and controls, especially in high-use zones, to immediately reduce electrical demand and improve brightness efficiency.",
+    );
+  } else {
+    recommendations.push(
+      "💡 Upgrade remaining non-LED fixtures and install daylight controls where practical to reduce lighting energy use without sacrificing comfort.",
+    );
+  }
+
+  recommendations.push(
+    "🔍 Schedule a professional energy audit tailored to this building profile to identify the highest-impact measures based on the actual operating conditions and utility profile.",
+  );
+
+  return recommendations.slice(0, 6);
+}
+
 // ===== GET AI-POWERED RECOMMENDATIONS =====
 async function getAIRecommendations(
   hvacType,
@@ -470,14 +539,13 @@ async function getAIRecommendations(
     return data.recommendations;
   } catch (error) {
     console.error("Error fetching AI recommendations:", error);
-    return [
-      "💡 Upgrade your HVAC system to a modern energy-efficient model to reduce consumption by up to 30%.",
-      "🔧 Install smart thermostats and building automation systems to optimize energy usage automatically.",
-      "🌱 Switch to LED lighting throughout the building to cut lighting costs by up to 75%.",
-      "🏗️ Improve building insulation and seal air leaks to reduce heating and cooling costs significantly.",
-      "📊 Install occupancy sensors to automatically reduce energy in unoccupied areas during off-hours.",
-      "🔍 Schedule a professional energy audit to identify hidden inefficiencies in your building systems.",
-    ];
+    return buildContextualFallbackRecommendations(
+      hvacType,
+      buildingAge,
+      buildingSize,
+      energyBill,
+      score,
+    );
   }
 }
 
